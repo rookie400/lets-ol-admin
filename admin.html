@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Lets-ol Admin Orders</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    min-height:100%;
+    font-family:Arial,sans-serif;
+    background:#f2f2f2;
+    color:#222;
+}
+
+body{
+    overflow-x:hidden;
+}
+
+/* HEADER */
+
+.header{
+    width:100%;
+    min-height:70px;
+    background:#c9151e;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.2);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:bold;
+}
+
+.headerCount{
+    background:#ffd400;
+    color:#111;
+    border-radius:20px;
+    padding:8px 14px;
+    font-weight:bold;
+}
+
+/* MAIN */
+
+.container{
+    width:100%;
+    max-width:1500px;
+    margin:auto;
+    padding:20px;
+}
+
+/* SECTION */
+
+.section{
+    background:white;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:25px;
+    box-shadow:0 3px 12px rgba(0,0,0,.1);
+}
+
+.sectionTitle{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:24px;
+}
+
+.sectionBadge{
+    background:#c9151e;
+    color:white;
+    border-radius:20px;
+    padding:6px 12px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+/* TABLE */
+
+.tableWrap{
+    width:100%;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+table{
+    width:100%;
+    min-width:1050px;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:11px 10px;
+    border-bottom:1px solid #ddd;
+    text-align:left;
+    vertical-align:middle;
+}
+
+th{
+    background:#f5f5f5;
+    font-size:14px;
+    white-space:nowrap;
+}
+
+td{
+    font-size:14px;
+}
+
+.orderNumber{
+    font-size:18px;
+    font-weight:bold;
+    color:#c9151e;
+}
+
+.productCell{
+    font-weight:bold;
+}
+
+.priceCell{
+    font-weight:bold;
+}
+
+.totalCell{
+    font-weight:bold;
+}
+
+/* STATUS */
+
+.status{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.statusPending{
+    background:#fff0b3;
+    color:#765b00;
+}
+
+.statusAccepted{
+    background:#d9edff;
+    color:#07558d;
+}
+
+.statusCompleted{
+    background:#d8f5df;
+    color:#137333;
+}
+
+.statusCancelled{
+    background:#ffdede;
+    color:#a40000;
+}
+
+/* BUTTONS */
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+button{
+    border:0;
+    border-radius:8px;
+    padding:9px 12px;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.acceptBtn{
+    background:#168a3c;
+    color:white;
+}
+
+.readyBtn{
+    background:#087f8c;
+    color:white;
+}
+
+.cancelBtn{
+    background:#d62828;
+    color:white;
+}
+
+.deleteBtn{
+    background:#555;
+    color:white;
+}
+
+button:active{
+    transform:scale(.96);
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+/* COMPLETED */
+
+.completedSection{
+    border-top:5px solid #168a3c;
+}
+
+.completedRow{
+    background:#f4fff6;
+}
+
+/* READY COUNTDOWN */
+
+.readyCountdown{
+    display:inline-block;
+    margin-top:4px;
+    padding:4px 8px;
+    border-radius:12px;
+    background:#fff1bd;
+    color:#755900;
+    font-size:11px;
+    font-weight:bold;
+}
+
+/* EMPTY */
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#777;
+}
+
+/* SALES */
+
+.salesTitle{
+    margin:0 0 15px;
+    font-size:24px;
+}
+
+.salesCards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.salesCard{
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:18px;
+    background:#fafafa;
+}
+
+.salesCard h3{
+    margin:0 0 15px;
+    color:#c9151e;
+}
+
+.salesLine{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:7px 0;
+    border-bottom:1px solid #eee;
+}
+
+.salesLine:last-child{
+    border-bottom:0;
+}
+
+.salesValue{
+    font-weight:bold;
+}
+
+.salesTotal{
+    margin-top:10px;
+    padding-top:12px;
+    border-top:2px solid #ddd;
+    display:flex;
+    justify-content:space-between;
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* ITEM BREAKDOWN */
+
+.itemBreakdown{
+    margin-top:20px;
+}
+
+.itemBreakdown h3{
+    margin:0 0 12px;
+}
+
+.itemTable{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.itemTable th,
+.itemTable td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+}
+
+.itemTable th{
+    background:#f5f5f5;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .salesCards{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .header{
+        padding:10px 12px;
+    }
+
+    .logo{
+        font-size:17px;
+    }
+
+    .headerCount{
+        font-size:12px;
+        padding:7px 10px;
+    }
+
+    .container{
+        padding:10px;
+    }
+
+    .section{
+        padding:12px;
+        border-radius:10px;
+    }
+
+    .sectionTitle h2{
+        font-size:19px;
+    }
+
+    table{
+        min-width:1050px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+
+<div class="logo">
+    🏪 Lets-ol Admin
+</div>
+
+<div class="headerCount"
+     id="orderCount">
+    Orders: 0
+</div>
+
+
+</header>
+
+<div class="container">
+
+<!-- ======================================================
+     CUSTOMER ORDERS
+====================================================== -->
+
+<div class="section">
+
+
+<div class="sectionTitle">
+
+    <h2>
+        🛒 CUSTOMER ORDERS
+    </h2>
+
+    <div class="sectionBadge"
+         id="customerOrderCount">
+        0
+    </div>
+
+</div>
+
+
+<div class="tableWrap">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>ORDER #</th>
+
+                <th>PRODUCT</th>
+
+                <th>QTY</th>
+
+                <th>PRICE</th>
+
+                <th>PAYMENT</th>
+
+                <th>TOTAL</th>
+
+                <th>DATE / TIME</th>
+
+                <th>STATUS</th>
+
+                <th>ACTION</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="ordersTable">
+
+            <tr>
+                <td colspan="9"
+                    class="empty">
+                    Loading orders...
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+</div>
+
+<!-- ======================================================
+     COMPLETED ORDERS
+====================================================== -->
+
+<div class="section completedSection">
+
+
+<div class="sectionTitle">
+
+    <h2>
+        ✅ COMPLETED ORDERS
+    </h2>
+
+    <div class="sectionBadge"
+         id="completedOrderCount">
+        0
+    </div>
+
+</div>
+
+
+<div class="tableWrap">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>ORDER #</th>
+
+                <th>PRODUCT</th>
+
+                <th>QTY</th>
+
+                <th>PRICE</th>
+
+                <th>PAYMENT</th>
+
+                <th>TOTAL</th>
+
+                <th>DATE / TIME</th>
+
+                <th>STATUS</th>
+
+                <th>ACTION</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="completedTable">
+
+            <tr>
+                <td colspan="9"
+                    class="empty">
+                    No completed orders.
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+</div>
+
+<!-- ======================================================
+     SALES DASHBOARD
+====================================================== -->
+
+<div class="section">
+
+
+<h2 class="salesTitle">
+    💰 SALES DASHBOARD
+</h2>
+
+
+<div class="salesCards">
+
+
+    <!-- TODAY -->
+
+    <div class="salesCard">
+
+        <h3>
+            TODAY
+        </h3>
+
+        <div class="salesLine">
+
+            <span>
+                Orders
+            </span>
+
+            <span class="salesValue"
+                  id="todayOrders">
+                0
+            </span>
+
+        </div>
+
+        <div class="salesLine">
+
+            <span>
+                Items Sold
+            </span>
+
+            <span class="salesValue"
+                  id="todayItems">
+                0
+            </span>
+
+        </div>
+
+        <div class="salesLine">
+
+            <span>
+                Average Order
+            </span>
+
+            <span class="salesValue"
+                  id="todayAverage">
+                ₱0
+            </span>
+
+        </div>
+
+        <div class="salesTotal">
+
+            <span>
+                Total Sales
+            </span>
+
+            <span id="todaySales">
+                ₱0
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- WEEK -->
+
+    <div class="salesCard">
+
+        <h3>
+            THIS WEEK
+        </h3>
+
+        <div class="salesLine">
+
+            <span>
+                Orders
+            </span>
+
+            <span class="salesValue"
+                  id="weekOrders">
+                0
+            </span>
+
+        </div>
+
+        <div class="salesLine">
+
+            <span>
+                Items Sold
+            </span>
+
+            <span class="salesValue"
+                  id="weekItems">
+                0
+            </span>
+
+        </div>
+
+        <div class="salesLine">
+
+            <span>
+                Average Order
+            </span>
+
+            <span class="salesValue"
+                  id="weekAverage">
+                ₱0
+            </span>
+
+        </div>
+
+        <div class="salesTotal">
+
+            <span>
+                Total Sales
+            </span>
+
+            <span id="weekSales">
+                ₱0
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- MONTH -->
+
+    <div class="salesCard">
+
+        <h3>
+            THIS MONTH
+        </h3>
+
+        <div class="salesLine">
+
+            <span>
+                Orders
+            </span>
+
+            <span class="salesValue"
+                  id="monthOrders">
+                0
+            </span>
+
+        </div>
+
+        <div class="salesLine">
+
+            <span>
+                Items Sold
+            </span>
+
+            <span class="salesValue"
+                  id="monthItems">
+                0
+            </span>
+
+        </div>
+
+        <div class="salesLine">
+
+            <span>
+                Average Order
+            </span>
+
+            <span class="salesValue"
+                  id="monthAverage">
+                ₱0
+            </span>
+
+        </div>
+
+        <div class="salesTotal">
+
+            <span>
+                Total Sales
+            </span>
+
+            <span id="monthSales">
+                ₱0
+            </span>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- ITEM BREAKDOWN -->
+
+<div class="itemBreakdown">
+
+    <h3>
+        📦 TODAY'S ITEM BREAKDOWN
+    </h3>
+
+    <div class="tableWrap">
+
+        <table class="itemTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        PRODUCT
+                    </th>
+
+                    <th>
+                        ITEMS SOLD
+                    </th>
+
+                    <th>
+                        SALES
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="itemBreakdownBody">
+
+                <tr>
+                    <td colspan="3"
+                        class="empty">
+                        No completed sales today.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+<script type="module">
+
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+
+import {
+    getDatabase,
+    ref,
+    onValue,
+    update,
+    remove
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyBiKccKbLiKUUYYxFdiAfiyODhV-4cH7Qc",
+
+    authDomain: "lets-ol.firebaseapp.com",
+
+    databaseURL:
+        "https://lets-ol-default-rtdb.firebaseio.com/",
+
+    projectId: "lets-ol",
+
+    storageBucket:
+        "lets-ol.firebasestorage.app",
+
+    messagingSenderId:
+        "657291655058",
+
+    appId:
+        "1:657291655058:web:68bd82199760268f84f34b",
+
+    measurementId:
+        "G-7TVM23CQX6"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const db =
+    getDatabase(app);
+
+
+/* ======================================================
+   VARIABLES
+====================================================== */
+
+let allOrders = {};
+
+let countdownTimers = {};
+
+
+/*
+   completedAt is the exact time when READY was pressed.
+
+   After 10 seconds:
+
+   Completed order moves from Customer Orders
+   to Completed Orders.
+*/
+
+
+/* ======================================================
+   FIREBASE ORDERS LISTENER
+====================================================== */
+
+onValue(
+    ref(db,"orders"),
+    snapshot => {
+
+        allOrders =
+            snapshot.val() || {};
+
+        renderOrders();
+
+        updateSales();
+
+    },
+    error => {
+
+        console.error(error);
+
+        document.getElementById(
+            "ordersTable"
+        ).innerHTML = `
+
+            <tr>
+
+                <td colspan="9"
+                    class="empty">
+
+                    Unable to load orders.
+
+                    <br>
+
+                    ${escapeHtml(
+                        error.message
+                    )}
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+);
+
+
+/* ======================================================
+   RENDER ORDERS
+====================================================== */
+
+function renderOrders(){
+
+    const customerTable =
+        document.getElementById(
+            "ordersTable"
+        );
+
+    const completedTable =
+        document.getElementById(
+            "completedTable"
+        );
+
+
+    customerTable.innerHTML = "";
+
+    completedTable.innerHTML = "";
+
+
+    const orders =
+        Object.entries(
+            allOrders
+        );
+
+
+    orders.sort(
+        (a,b) => {
+
+            return Number(
+                b[1].createdAt || 0
+            )
+            -
+            Number(
+                a[1].createdAt || 0
+            );
+
+        }
+    );
+
+
+    let customerCount = 0;
+
+    let completedCount = 0;
+
+
+    orders.forEach(
+        ([key,order]) => {
+
+            if(!order){
+                return;
+            }
+
+
+            /*
+            COMPLETED ORDERS
+
+            Only move to Completed Orders
+            after 10 seconds have passed
+            since READY was pressed.
+            */
+
+            if(
+                order.status === "Completed" &&
+                order.completedAt &&
+                Date.now() -
+                Number(order.completedAt)
+                >= 10000
+            ){
+
+                completedCount++;
+
+                addCompletedRow(
+                    completedTable,
+                    key,
+                    order
+                );
+
+                clearCountdown(key);
+
+                return;
+
+            }
+
+
+            /*
+            Before 10 seconds have passed,
+            keep the order in Customer Orders.
+            */
+
+            customerCount++;
+
+            addCustomerRow(
+                customerTable,
+                key,
+                order
+            );
+
+
+            /*
+            If already Completed,
+            start/update countdown.
+            */
+
+            if(
+                order.status === "Completed" &&
+                order.completedAt
+            ){
+
+                startCountdown(
+                    key,
+                    order.completedAt
+                );
+
+            }
+
+        }
+    );
+
+
+    if(customerCount === 0){
+
+        customerTable.innerHTML = `
+
+            <tr>
+
+                <td colspan="9"
+                    class="empty">
+
+                    No customer orders.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    if(completedCount === 0){
+
+        completedTable.innerHTML = `
+
+            <tr>
+
+                <td colspan="9"
+                    class="empty">
+
+                    No completed orders.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    document.getElementById(
+        "customerOrderCount"
+    ).textContent =
+        customerCount;
+
+
+    document.getElementById(
+        "completedOrderCount"
+    ).textContent =
+        completedCount;
+
+
+    document.getElementById(
+        "orderCount"
+    ).textContent =
+        "Orders: " +
+        orders.length;
+
+
+    /*
+    Force another render after the
+    remaining 10-second period.
+    */
+
+    schedulePendingCompletedOrders();
+
+}
+
+
+/* ======================================================
+   CUSTOMER ORDER ROW
+====================================================== */
+
+function addCustomerRow(
+    table,
+    key,
+    order
+){
+
+    const tr =
+        document.createElement("tr");
+
+
+    const status =
+        order.status ||
+        "Pending";
+
+
+    let statusHTML = "";
+
+
+    if(status === "Pending"){
+
+        statusHTML = `
+            <span class="status statusPending">
+                PENDING
+            </span>
+        `;
+
+    }
+    else if(status === "Accepted"){
+
+        statusHTML = `
+            <span class="status statusAccepted">
+                ACCEPTED
+            </span>
+        `;
+
+    }
+    else if(status === "Completed"){
+
+        const remaining =
+            Math.max(
+                0,
+                10000 -
+                (
+                    Date.now() -
+                    Number(
+                        order.completedAt || 0
+                    )
+                )
+            );
+
+
+        const seconds =
+            Math.ceil(
+                remaining / 1000
+            );
+
+
+        statusHTML = `
+
+            <span class="status statusCompleted">
+                READY
+            </span>
+
+            <br>
+
+            <span class="readyCountdown"
+                  id="countdown-${key}">
+                Moving in ${seconds}s
+            </span>
+
+        `;
+
+    }
+    else if(status === "Cancelled"){
+
+        statusHTML = `
+            <span class="status statusCancelled">
+                CANCELLED
+            </span>
+        `;
+
+    }
+    else{
+
+        statusHTML = `
+            <span class="status">
+                ${escapeHtml(status)}
+            </span>
+        `;
+
+    }
+
+
+    tr.innerHTML = `
+
+        <td>
+
+            <div class="orderNumber">
+                #${escapeHtml(
+                    String(
+                        order.orderNumber || ""
+                    )
+                )}
+            </div>
+
+        </td>
+
+
+        <td>
+
+            <div class="productCell">
+                ${escapeHtml(
+                    order.product || ""
+                )}
+            </div>
+
+        </td>
+
+
+        <td>
+
+            ${Number(
+                order.quantity || 0
+            )}
+
+        </td>
+
+
+        <td>
+
+            <div class="priceCell">
+                ₱${Number(
+                    order.price || 0
+                ).toLocaleString()}
+            </div>
+
+        </td>
+
+
+        <td>
+
+            ${escapeHtml(
+                order.payment || ""
+            )}
+
+        </td>
+
+
+        <td>
+
+            <div class="totalCell">
+                ₱${Number(
+                    order.total || 0
+                ).toLocaleString()}
+            </div>
+
+        </td>
+
+
+        <td>
+
+            ${formatDate(
+                order.createdAt
+            )}
+
+        </td>
+
+
+        <td>
+
+            ${statusHTML}
+
+        </td>
+
+
+        <td>
+
+            <div class="actions">
+
+                ${
+                    status === "Pending"
+
+                    ?
+
+                    `
+
+                    <button
+                        class="acceptBtn"
+                        onclick="acceptOrder('${key}')">
+
+                        ACCEPT
+
+                    </button>
+
+                    <button
+                        class="cancelBtn"
+                        onclick="cancelOrder('${key}')">
+
+                        CANCEL
+
+                    </button>
+
+                    `
+
+                    :
+
+                    status === "Accepted"
+
+                    ?
+
+                    `
+
+                    <button
+                        class="readyBtn"
+                        onclick="readyOrder('${key}')">
+
+                        READY
+
+                    </button>
+
+                    <button
+                        class="cancelBtn"
+                        onclick="cancelOrder('${key}')">
+
+                        CANCEL
+
+                    </button>
+
+                    `
+
+                    :
+
+                    status === "Completed"
+
+                    ?
+
+                    `
+
+                    <button
+                        class="readyBtn"
+                        disabled>
+
+                        READY
+
+                    </button>
+
+                    `
+
+                    :
+
+                    `
+
+                    <button
+                        class="deleteBtn"
+                        onclick="deleteOrder('${key}')">
+
+                        DELETE
+
+                    </button>
+
+                    `
+
+                }
+
+            </div>
+
+        </td>
+
+    `;
+
+
+    table.appendChild(tr);
+
+}
+
+
+/* ======================================================
+   COMPLETED ROW
+====================================================== */
+
+function addCompletedRow(
+    table,
+    key,
+    order
+){
+
+    const tr =
+        document.createElement("tr");
+
+
+    tr.className =
+        "completedRow";
+
+
+    tr.innerHTML = `
+
+        <td>
+
+            <div class="orderNumber">
+                #${escapeHtml(
+                    String(
+                        order.orderNumber || ""
+                    )
+                )}
+            </div>
+
+        </td>
+
+
+        <td>
+
+            <div class="productCell">
+                ${escapeHtml(
+                    order.product || ""
+                )}
+            </div>
+
+        </td>
+
+
+        <td>
+
+            ${Number(
+                order.quantity || 0
+            )}
+
+        </td>
+
+
+        <td>
+
+            <div class="priceCell">
+                ₱${Number(
+                    order.price || 0
+                ).toLocaleString()}
+            </div>
+
+        </td>
+
+
+        <td>
+
+            ${escapeHtml(
+                order.payment || ""
+            )}
+
+        </td>
+
+
+        <td>
+
+            <div class="totalCell">
+                ₱${Number(
+                    order.total || 0
+                ).toLocaleString()}
+            </div>
+
+        </td>
+
+
+        <td>
+
+            ${formatDate(
+                order.createdAt
+            )}
+
+        </td>
+
+
+        <td>
+
+            <span class="status statusCompleted">
+                COMPLETED
+            </span>
+
+        </td>
+
+
+        <td>
+
+            <div class="actions">
+
+                <button
+                    class="deleteBtn"
+                    onclick="deleteOrder('${key}')">
+
+                    DELETE
+
+                </button>
+
+            </div>
+
+        </td>
+
+    `;
+
+
+    table.appendChild(tr);
+
+}
+
+
+/* ======================================================
+   ACCEPT
+====================================================== */
+
+window.acceptOrder =
+async function(key){
+
+    try{
+
+        await update(
+            ref(
+                db,
+                "orders/" + key
+            ),
+            {
+                status:"Accepted"
+            }
+        );
+
+    }
+    catch(error){
+
+        alert(
+            "Unable to accept order:\n" +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* ======================================================
+   READY
+====================================================== */
+
+/*
+   NO CONFIRMATION POPUP.
+
+   When READY is pressed:
+
+   status = Completed
+   completedAt = current time
+
+   The customer immediately receives
+   the READY status and 10-beep notification.
+
+   Admin keeps showing the order for 10 seconds.
+
+   After 10 seconds renderOrders() places it
+   into Completed Orders.
+*/
+
+window.readyOrder =
+async function(key){
+
+    try{
+
+        await update(
+            ref(
+                db,
+                "orders/" + key
+            ),
+            {
+                status:"Completed",
+                completedAt:Date.now()
+            }
+        );
+
+    }
+    catch(error){
+
+        alert(
+            "Unable to update order:\n" +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* ======================================================
+   CANCEL
+====================================================== */
+
+window.cancelOrder =
+async function(key){
+
+    const ok =
+        confirm(
+            "Are you sure you want to CANCEL this order?"
+        );
+
+
+    if(!ok){
+        return;
+    }
+
+
+    try{
+
+        await update(
+            ref(
+                db,
+                "orders/" + key
+            ),
+            {
+                status:"Cancelled"
+            }
+        );
+
+    }
+    catch(error){
+
+        alert(
+            "Unable to cancel order:\n" +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* ======================================================
+   DELETE
+====================================================== */
+
+window.deleteOrder =
+async function(key){
+
+    const ok =
+        confirm(
+            "Are you sure you want to DELETE this order?"
+        );
+
+
+    if(!ok){
+        return;
+    }
+
+
+    try{
+
+        await remove(
+            ref(
+                db,
+                "orders/" + key
+            )
+        );
+
+    }
+    catch(error){
+
+        alert(
+            "Unable to delete order:\n" +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* ======================================================
+   COUNTDOWN
+====================================================== */
+
+function startCountdown(
+    key,
+    completedAt
+){
+
+    if(
+        countdownTimers[key]
+    ){
+
+        return;
+
+    }
+
+
+    function updateCountdown(){
+
+        const countdown =
+            document.getElementById(
+                "countdown-" + key
+            );
+
+
+        const remaining =
+            Math.max(
+                0,
+                10000 -
+                (
+                    Date.now() -
+                    Number(completedAt)
+                )
+            );
+
+
+        const seconds =
+            Math.ceil(
+                remaining / 1000
+            );
+
+
+        if(countdown){
+
+            countdown.textContent =
+                "Moving in " +
+                seconds +
+                "s";
+
+        }
+
+
+        if(remaining <= 0){
+
+            clearCountdown(key);
+
+            renderOrders();
+
+        }
+
+    }
+
+
+    updateCountdown();
+
+
+    countdownTimers[key] =
+        setInterval(
+            updateCountdown,
+            500
+        );
+
+}
+
+
+/* ======================================================
+   CLEAR COUNTDOWN
+====================================================== */
+
+function clearCountdown(key){
+
+    if(
+        countdownTimers[key]
+    ){
+
+        clearInterval(
+            countdownTimers[key]
+        );
+
+        delete countdownTimers[key];
+
+    }
+
+}
+
+
+/* ======================================================
+   SCHEDULE PENDING COMPLETED ORDERS
+====================================================== */
+
+function schedulePendingCompletedOrders(){
+
+    Object.entries(
+        allOrders || {}
+    ).forEach(
+        ([key,order]) => {
+
+            if(
+                order &&
+                order.status === "Completed" &&
+                order.completedAt
+            ){
+
+                const remaining =
+                    10000 -
+                    (
+                        Date.now() -
+                        Number(
+                            order.completedAt
+                        )
+                    );
+
+
+                if(remaining <= 0){
+
+                    return;
+
+                }
+
+
+                if(
+                    !countdownTimers[key]
+                ){
+
+                    startCountdown(
+                        key,
+                        order.completedAt
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ======================================================
+   SALES
+====================================================== */
+
+function updateSales(){
+
+    const orders =
+        Object.values(
+            allOrders || {}
+        );
+
+
+    /*
+    Only COMPLETED orders count as sales.
+    */
+
+    const completed =
+        orders.filter(
+            order =>
+                order &&
+                order.status === "Completed"
+        );
+
+
+    const now =
+        new Date();
+
+
+    const todayStart =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+        ).getTime();
+
+
+    const weekStartDate =
+        new Date(now);
+
+
+    /*
+    Sunday is the first day of the week.
+    */
+
+    const day =
+        weekStartDate.getDay();
+
+
+    weekStartDate.setDate(
+        weekStartDate.getDate() - day
+    );
+
+    weekStartDate.setHours(
+        0,0,0,0
+    );
+
+
+    const weekStart =
+        weekStartDate.getTime();
+
+
+    const monthStart =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            1
+        ).getTime();
+
+
+    const todayOrders =
+        completed.filter(
+            order =>
+                Number(
+                    order.createdAt || 0
+                ) >= todayStart
+        );
+
+
+    const weekOrders =
+        completed.filter(
+            order =>
+                Number(
+                    order.createdAt || 0
+                ) >= weekStart
+        );
+
+
+    const monthOrders =
+        completed.filter(
+            order =>
+                Number(
+                    order.createdAt || 0
+                ) >= monthStart
+        );
+
+
+    updateSalesPeriod(
+        todayOrders,
+        "today"
+    );
+
+
+    updateSalesPeriod(
+        weekOrders,
+        "week"
+    );
+
+
+    updateSalesPeriod(
+        monthOrders,
+        "month"
+    );
+
+
+    updateTodayItems(
+        todayOrders
+    );
+
+}
+
+
+/* ======================================================
+   SALES PERIOD
+====================================================== */
+
+function updateSalesPeriod(
+    orders,
+    prefix
+){
+
+    let items = 0;
+
+    let sales = 0;
+
+
+    orders.forEach(
+        order => {
+
+            items += Number(
+                order.quantity || 0
+            );
+
+            sales += Number(
+                order.total || 0
+            );
+
+        }
+    );
+
+
+    const count =
+        orders.length;
+
+
+    const average =
+        count > 0
+            ? sales / count
+            : 0;
+
+
+    document.getElementById(
+        prefix + "Orders"
+    ).textContent =
+        count;
+
+
+    document.getElementById(
+        prefix + "Items"
+    ).textContent =
+        items;
+
+
+    document.getElementById(
+        prefix + "Average"
+    ).textContent =
+        formatPeso(average);
+
+
+    document.getElementById(
+        prefix + "Sales"
+    ).textContent =
+        formatPeso(sales);
+
+}
+
+
+/* ======================================================
+   TODAY ITEM BREAKDOWN
+====================================================== */
+
+function updateTodayItems(
+    orders
+){
+
+    const body =
+        document.getElementById(
+            "itemBreakdownBody"
+        );
+
+
+    const products = {};
+
+
+    orders.forEach(
+        order => {
+
+            const name =
+                order.product ||
+                "Unknown Product";
+
+
+            if(!products[name]){
+
+                products[name] = {
+                    quantity:0,
+                    sales:0
+                };
+
+            }
+
+
+            products[name].quantity +=
+                Number(
+                    order.quantity || 0
+                );
+
+
+            products[name].sales +=
+                Number(
+                    order.total || 0
+                );
+
+        }
+    );
+
+
+    const entries =
+        Object.entries(
+            products
+        );
+
+
+    entries.sort(
+        (a,b) =>
+            b[1].quantity -
+            a[1].quantity
+    );
+
+
+    if(entries.length === 0){
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td colspan="3"
+                    class="empty">
+
+                    No completed sales today.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    body.innerHTML = "";
+
+
+    entries.forEach(
+        ([name,data]) => {
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${escapeHtml(name)}
+                </td>
+
+                <td>
+                    ${data.quantity}
+                </td>
+
+                <td>
+                    ${formatPeso(data.sales)}
+                </td>
+
+            `;
+
+
+            body.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+/* ======================================================
+   DATE
+====================================================== */
+
+function formatDate(
+    timestamp
+){
+
+    if(!timestamp){
+
+        return "";
+
+    }
+
+
+    return new Date(
+        Number(timestamp)
+    ).toLocaleString();
+
+}
+
+
+/* ======================================================
+   PESO
+====================================================== */
+
+function formatPeso(
+    value
+){
+
+    return "₱" +
+        Number(
+            value || 0
+        ).toLocaleString(
+            undefined,
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+}
+
+
+/* ======================================================
+   ESCAPE HTML
+====================================================== */
+
+function escapeHtml(
+    value
+){
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ======================================================
+   CLEANUP OLD TIMERS
+====================================================== */
+
+setInterval(
+    () => {
+
+        Object.keys(
+            countdownTimers
+        ).forEach(
+            key => {
+
+                if(
+                    !allOrders[key] ||
+                    allOrders[key].status !==
+                        "Completed"
+                ){
+
+                    clearCountdown(key);
+
+                }
+
+            }
+        );
+
+    },
+    3000
+);
+
+
+</script>
+
+</body>
+</html>
