@@ -1108,10 +1108,10 @@ function renderOrderTable(list){
 
                     <tr>
                         <th>ORDER #</th>
+                        <th>PRODUCTS</th>
                         <th>ACTION</th>
                         <th>STATUS</th>
-                        <th>CUSTOMER</th>
-                        <th>PRODUCTS</th>
+                        <th>CUSTOMER</th>                  
                         <th>ITEMS</th>
                         <th>TOTAL</th>
                         <th>PAYMENT</th>
@@ -1146,6 +1146,9 @@ function renderOrderTable(list){
                                         )}
                                     </div>
                                 </td>
+                                             <td class="products">
+                                    ${renderProducts(order)}
+                                </td>
                                             <td class="actions">
                                     ${renderActions(
                                         key,
@@ -1168,9 +1171,7 @@ function renderOrderTable(list){
                                     </div>
                                 </td>
 
-                                <td class="products">
-                                    ${renderProducts(order)}
-                                </td>
+                               
 
                                 <td>
                                     <div class="item-count">
