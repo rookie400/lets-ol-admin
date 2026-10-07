@@ -1108,14 +1108,15 @@ function renderOrderTable(list){
 
                     <tr>
                         <th>ORDER #</th>
+                        <th>ACTION</th>
+                        <th>STATUS</th>
                         <th>CUSTOMER</th>
                         <th>PRODUCTS</th>
                         <th>ITEMS</th>
                         <th>TOTAL</th>
                         <th>PAYMENT</th>
                         <th>DATE / TIME</th>
-                        <th>STATUS</th>
-                        <th>ACTION</th>
+                        
                     </tr>
 
                 </thead>
@@ -1144,6 +1145,18 @@ function renderOrderTable(list){
                                             key
                                         )}
                                     </div>
+                                </td>
+                                            <td class="actions">
+                                    ${renderActions(
+                                        key,
+                                        order
+                                    )}
+                                </td>
+                                        <td>
+                                    <span
+                                        class="status ${statusClass(status)}">
+                                        ${escapeHTML(status)}
+                                    </span>
                                 </td>
 
                                 <td>
@@ -1190,19 +1203,7 @@ function renderOrderTable(list){
                                     </div>
                                 </td>
 
-                                <td>
-                                    <span
-                                        class="status ${statusClass(status)}">
-                                        ${escapeHTML(status)}
-                                    </span>
-                                </td>
-
-                                <td class="actions">
-                                    ${renderActions(
-                                        key,
-                                        order
-                                    )}
-                                </td>
+                                
 
                             </tr>
                         `;
@@ -1486,7 +1487,7 @@ async function(key){
 
 
     const readyAt =
-        Date.now() + 10000;
+        Date.now() + 3000;
 
 
     try{
